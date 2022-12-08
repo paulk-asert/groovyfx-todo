@@ -56,7 +56,7 @@ class ToDoItem {
     @FXBindable LocalDate date
 }
 
-var file = 'D:/tmp/todolist.json' as File
+var file = 'todolist.json' as File
 var mapper = new ObjectMapper().registerModule(new JavaTimeModule())
 var items = FXCollections.observableList(mapper.readValue(file, new TypeReference<List<ToDoItem>>() {}))
 var table, item, category, date
