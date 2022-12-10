@@ -58,25 +58,27 @@ class ToDoItem {
 
 var file = 'todolist.json' as File
 var mapper = new ObjectMapper().registerModule(new JavaTimeModule())
-var items = FXCollections.observableList(mapper.readValue(file, new TypeReference<List<ToDoItem>>() {}))
+var init = file.exists() ? mapper.readValue(file, new TypeReference<List<ToDoItem>>() {}) : []
+var items = FXCollections.observableList(init)
 var table, item, category, date
+var close = { event -> mapper.writeValue(file, items) }
 
 start {
-    stage(title: 'GroovyFX ToDo Demo', show: true, onCloseRequest: { event ->
-        mapper.writeValue(file, items)
-    }) {
+    var style1 = [padding: 10, spacing: 10]
+    var style2 = [minWidth: 100, alignment: RIGHT]
+    stage(title: 'GroovyFX ToDo Demo', show: true, onCloseRequest: close) {
         scene {
-            vbox(padding: 10, spacing: 10) {
-                hbox(spacing: 5) {
-                    label('Item:', minWidth: 100, alignment: RIGHT)
+            vbox(*:style1) {
+                hbox(*:style1) {
+                    label('Item:', *:style2)
                     item = textField()
                 }
-                hbox(spacing: 5) {
-                    label('Category:', minWidth: 100, alignment: RIGHT)
+                hbox(*:style1) {
+                    label('Category:', *:style2)
                     category = choiceBox(items: ToDoCategory.values().toList())
                 }
-                hbox(spacing: 5) {
-                    label('Date:', minWidth: 100, alignment: RIGHT)
+                hbox(*:style1) {
+                    label('Date:', *:style2)
                     date = datePicker()
                 }
                 table = tableView(items: items) {
@@ -86,10 +88,11 @@ start {
                             type: Date, converter: { from -> from.format('yyyy-MM-dd') }
                     )
                 }
-                hbox(spacing: 10, alignment: CENTER) {
+                hbox(*:style1, alignment: CENTER) {
                     button('Add', onAction: {
-                        if (item.content.get() && category.value && date.value) {
-                            items << new ToDoItem(item.content.get(), category.value, date.value)
+                        def name = item.content.get()
+                        if (name && category.value && date.value) {
+                            items << new ToDoItem(name, category.value, date.value)
                         }
                     })
                     button('Remove', onAction: {

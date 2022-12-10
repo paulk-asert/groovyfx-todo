@@ -26,6 +26,10 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = 'Todo'
+}
+
 dependencies {
     implementation "org.codehaus.groovy:groovy:$groovyVersion"
     implementation "org.codehaus.groovy:groovy-datetime:$groovyVersion"
