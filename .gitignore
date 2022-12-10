@@ -3,6 +3,7 @@ user.gradle
 target/
 build/
 out/
+todolist.json
 
 *.DS_Store
 *.class
