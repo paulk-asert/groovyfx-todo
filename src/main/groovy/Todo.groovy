@@ -92,7 +92,7 @@ start {
                                 super.updateItem(cat, empty)
                                 if (empty) return
                                 graphic = new Label(cat.name()).tap {
-                                    it.graphic = new ImageView(images[cat])
+                                    graphic = new ImageView(images[cat])
                                 }
                             }
                         }
