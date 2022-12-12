@@ -63,11 +63,11 @@ class ToDoItem {
 
 var file = 'todolist.json' as File
 var mapper = new ObjectMapper().registerModule(new JavaTimeModule())
-def open = { mapper.readValue(it, new TypeReference<List<ToDoItem>>() {}) }
+var open = { mapper.readValue(it, new TypeReference<List<ToDoItem>>() {}) }
 var init = file.exists() ? open(file) : []
 var items = FXCollections.observableList(init)
 var close = { mapper.writeValue(file, items) }
-var table, name, category, date, images = [:]
+var table, task, category, date, images = [:]
 var urls = ToDoCategory.values().collectEntries {
     [it, "emoji/${Integer.toHexString(it.emoji.codePointAt(0))}.png"]
 }
@@ -90,11 +90,9 @@ start {
                         new ListCell<ToDoCategory>() {
                             void updateItem(ToDoCategory cat, boolean empty) {
                                 super.updateItem(cat, empty)
-                                if (!empty) {
-                                    var label = new Label(cat.name())
-                                    graphic = new Label(cat.name()).tap {
-                                        graphic = new ImageView(images[cat])
-                                    }
+                                if (empty) return
+                                graphic = new Label(cat.name()).tap {
+                                    it.graphic = new ImageView(images[cat])
                                 }
                             }
                         }
