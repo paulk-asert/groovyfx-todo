@@ -1,0 +1,2 @@
+Free emojis sourced from:
+https://github.com/pavlobu/emoji-text-flow-javafx
