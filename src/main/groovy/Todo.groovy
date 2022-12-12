@@ -54,10 +54,11 @@ enum ToDoCategory {
 
 @Canonical
 @JsonIncludeProperties(['task', 'category', 'date'])
+@FXBindable
 class ToDoItem {
-    @FXBindable String task
-    @FXBindable ToDoCategory category
-    @FXBindable LocalDate date
+    String task
+    ToDoCategory category
+    LocalDate date
 }
 
 var file = 'todolist.json' as File
