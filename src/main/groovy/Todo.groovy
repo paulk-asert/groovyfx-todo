@@ -113,7 +113,13 @@ start {
                 label('Date:', row: 3, column: 0)
                 date = datePicker(row: 3, column: 1)
 
-                table = tableView(items: items, row: 4, columnSpan: REMAINING) {
+                table = tableView(items: items, row: 4, columnSpan: REMAINING,
+                        onMouseClicked: {
+                            var item = items[table.selectionModel.selectedIndex.value]
+                            task.text = item.task
+                            category.value = item.category
+                            date.value = item.date
+                        }) {
                     tableColumn(property: 'task', text: 'Task', prefWidth: 200)
                     tableColumn(property: 'category', text: 'Category', prefWidth: 80,
                             cellValueFactory: { new ReadOnlyObjectWrapper(it.value) },
@@ -121,14 +127,22 @@ start {
                     tableColumn(property: 'date', text: 'Date', prefWidth: 90, type: Date)
                 }
 
-                hbox(row: 5, columnSpan: REMAINING, alignment: CENTER, spacing: 5) {
+                hbox(row: 5, columnSpan: REMAINING, alignment: CENTER, spacing: 10) {
                     button('Add', onAction: {
                         if (task.text && category.value && date.value) {
                             items << new ToDoItem(task.text, category.value, date.value)
                         }
                     })
+                    button('Update', onAction: {
+                        if (task.text && category.value && date.value) {
+                            var item = items[table.selectionModel.selectedIndex.value]
+                            item.task = task.text
+                            item.category = category.value
+                            item.date = date.value
+                        }
+                    })
                     button('Remove', onAction: {
-                        items.removeAll(table.selectionModel.selectedItems)
+                        items.removeAt(table.selectionModel.selectedIndex.value)
                     })
                 }
             }
