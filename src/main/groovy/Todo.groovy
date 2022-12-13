@@ -27,11 +27,11 @@ import javafx.scene.control.Label
 import javafx.scene.control.ListCell
 import javafx.scene.control.TableCell
 import javafx.scene.image.ImageView
-import javafx.scene.layout.GridPane
 
 import java.time.LocalDate
 
 import static groovyx.javafx.GroovyFX.start
+import static javafx.scene.layout.GridPane.REMAINING
 
 enum ToDoCategory {
     EXERCISE("🚴"),
@@ -99,7 +99,7 @@ start {
     stage(title: 'GroovyFX ToDo Demo', show: true, onCloseRequest: close) {
         urls.each { k, v -> images[k] = image(url: v, width: 24, height: 24) }
         scene {
-            gridPane(hgap: 5, vgap: 10, padding: 25) {
+            gridPane(hgap: 10, vgap: 10, padding: 20) {
                 columnConstraints(minWidth: 80, halignment: 'right')
                 columnConstraints(prefWidth: 250)
 
@@ -113,7 +113,7 @@ start {
                 label('Date:', row: 3, column: 0)
                 date = datePicker(row: 3, column: 1)
 
-                table = tableView(items: items, row: 4, columnSpan: GridPane.REMAINING) {
+                table = tableView(items: items, row: 4, columnSpan: REMAINING) {
                     tableColumn(property: 'task', text: 'Task', prefWidth: 200)
                     tableColumn(property: 'category', text: 'Category', prefWidth: 80,
                             cellValueFactory: { new ReadOnlyObjectWrapper(it.value) },
@@ -121,7 +121,7 @@ start {
                     tableColumn(property: 'date', text: 'Date', prefWidth: 90, type: Date)
                 }
 
-                hbox(row: 5, columnSpan: GridPane.REMAINING, alignment: CENTER, spacing: 5) {
+                hbox(row: 5, columnSpan: REMAINING, alignment: CENTER, spacing: 5) {
                     button('Add', onAction: {
                         if (task.text && category.value && date.value) {
                             items << new ToDoItem(task.text, category.value, date.value)
