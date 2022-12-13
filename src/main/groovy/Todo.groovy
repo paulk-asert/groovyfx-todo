@@ -134,7 +134,8 @@ start {
                         }
                     })
                     button('Update', onAction: {
-                        if (task.text && category.value && date.value) {
+                        if (task.text && category.value && date.value &&
+                                !table.selectionModel.empty) {
                             var item = items[table.selectionModel.selectedIndex.value]
                             item.task = task.text
                             item.category = category.value
@@ -142,7 +143,8 @@ start {
                         }
                     })
                     button('Remove', onAction: {
-                        items.removeAt(table.selectionModel.selectedIndex.value)
+                        if (!table.selectionModel.empty)
+                            items.removeAt(table.selectionModel.selectedIndex.value)
                     })
                 }
             }
