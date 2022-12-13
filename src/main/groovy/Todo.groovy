@@ -27,6 +27,7 @@ import javafx.scene.control.Label
 import javafx.scene.control.ListCell
 import javafx.scene.control.TableCell
 import javafx.scene.image.ImageView
+import javafx.scene.layout.GridPane
 
 import java.time.LocalDate
 
@@ -95,34 +96,32 @@ def graphicCellFactory = {
 }
 
 start {
-    var style1 = [padding: 5, spacing: 5]
-    var style2 = [minWidth: 80, alignment: RIGHT]
     stage(title: 'GroovyFX ToDo Demo', show: true, onCloseRequest: close) {
         urls.each { k, v -> images[k] = image(url: v, width: 24, height: 24) }
         scene {
-            vbox(*: style1) {
-                hbox(*: style1) {
-                    label('Task:', *: style2)
-                    task = textField()
-                }
-                hbox(*: style1) {
-                    label('Category:', *: style2)
-                    category = comboBox(items: ToDoCategory.values().toList(),
-                            cellFactory: graphicLabelFactory)
-                }
-                hbox(*: style1) {
-                    label('Date:', *: style2)
-                    date = datePicker()
-                }
-                table = tableView(items: items) {
+            gridPane(hgap: 5, vgap: 10, padding: 25) {
+                columnConstraints(minWidth: 80, halignment: 'right')
+                columnConstraints(prefWidth: 250)
+
+                label('Task:', row: 1, column: 0)
+                task = textField(row: 1, column: 1, hgrow: 'always')
+
+                label('Category:', row: 2, column: 0)
+                category = comboBox(items: ToDoCategory.values().toList(),
+                        cellFactory: graphicLabelFactory, row: 2, column: 1)
+
+                label('Date:', row: 3, column: 0)
+                date = datePicker(row: 3, column: 1)
+
+                table = tableView(items: items, row: 4, columnSpan: GridPane.REMAINING) {
                     tableColumn(property: 'task', text: 'Task', prefWidth: 200)
                     tableColumn(property: 'category', text: 'Category', prefWidth: 80,
                             cellValueFactory: { new ReadOnlyObjectWrapper(it.value) },
                             cellFactory: graphicCellFactory)
-                    tableColumn(property: 'date', text: 'Date', prefWidth: 90,
-                            type: Date, alignment: CENTER)
+                    tableColumn(property: 'date', text: 'Date', prefWidth: 90, type: Date)
                 }
-                hbox(*: style1, alignment: CENTER) {
+
+                hbox(row: 5, columnSpan: GridPane.REMAINING, alignment: CENTER, spacing: 5) {
                     button('Add', onAction: {
                         if (task.text && category.value && date.value) {
                             items << new ToDoItem(task.text, category.value, date.value)
