@@ -57,9 +57,9 @@ enum ToDoCategory {
 @JsonIncludeProperties(['task', 'category', 'date'])
 @FXBindable
 class ToDoItem {
-    String task
-    ToDoCategory category
-    LocalDate date
+    final String task
+    final ToDoCategory category
+    final LocalDate date
 }
 
 var file = 'todolist.json' as File
@@ -136,10 +136,8 @@ start {
                     button('Update', onAction: {
                         if (task.text && category.value && date.value &&
                                 !table.selectionModel.empty) {
-                            var item = items[table.selectionModel.selectedIndex.value]
-                            item.task = task.text
-                            item.category = category.value
-                            item.date = date.value
+                            items[table.selectionModel.selectedIndex.value] =
+                                    new ToDoItem(task.text, category.value, date.value)
                         }
                     })
                     button('Remove', onAction: {
